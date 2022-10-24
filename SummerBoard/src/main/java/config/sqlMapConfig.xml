@@ -12,7 +12,7 @@
 
 
 	<dataSource type="SIMPLE">
-		<property name="JDBC.Driver" value="oracle.jdbc.driver.OraclerDriver"/>
+		<property name="JDBC.Driver" value="oracle.jdbc.driver.OracleDriver"/>
 		<property name="JDBC.ConnectionURL" value="jdbc:oracle:thin:@localhost:1521:XE"/>
 		<property name="JDBC.Username" value="spring"/>
 		<property name="JDBC.Password" value="oracle"/>
@@ -20,8 +20,10 @@
 </transactionManager>
 
 	<sqlMap resource = "net/nice19/smboard/ibatis/member.xml"/>
-	<sqlMap resource = "net/nice19/smboard/ibatis/board.xml"/>
+	<!-- <sqlMap resource = "net/nice19/smboard/ibatis/board.xml"/> -->
 	<sqlMap resource = "net/nice19/smboard/ibatis/login.xml"/>
+	
+	
 
 </sqlMapConfig>
 

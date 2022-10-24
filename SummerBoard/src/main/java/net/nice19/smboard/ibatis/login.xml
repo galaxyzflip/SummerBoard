@@ -5,4 +5,14 @@
     PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
     
+    <sqlMap namespace="login">
     
+    	<typeAlias alias="LoginModel" type="net.nice19.smboard.login.model.LoginSessionModel"/>
+    	
+    	<select id="loginCheck" parameterClass="String" resultClass="LoginModel">
+    	
+    		select idx, userid, userpw, username, joindate from jmboard_member where userId=#userId#
+    	
+    	</select>
+    	
+    </sqlMap>
