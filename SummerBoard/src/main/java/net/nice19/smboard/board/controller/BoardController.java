@@ -327,8 +327,47 @@ public class BoardController {
 	@RequestMapping("/commentDelete.do")
 	public ModelAndView commentDelete(HttpServletRequest request, HttpSession session) {
 		
+		int idx = Integer.parseInt(request.getParameter("linkedArticleNum"));
+		int linkedArticleNum = Integer.parseInt(request.getParameter("linkedArticleNum"));
 		
-		return null;
+		String userId = (String) session.getAttribute("userId");
+		BoardCommentModel comment = boardService.getOneComment(idx);
+		
+		ModelAndView mav = new ModelAndView();
+		
+		if(!userId.equals(comment.getWriterId())) {
+			mav.addObject("errCode", "1");
+			
+		}else {
+			boardService.deleteComment(idx);
+		}
+		
+		mav.addObject("idx", linkedArticleNum);
+		mav.setViewName("redirect:view.do");
+		
+		return mav;
+	}
+	
+	@RequestMapping("/recommend.do")
+	public ModelAndView updateRecommendcount(HttpServletRequest request, HttpSession session) {
+		
+		int idx = Integer.parseInt(request.getParameter("idx"));
+		String userId = (String) session.getAttribute("userId");
+		BoardModel board = boardService.getOneArticle(idx);
+		
+		ModelAndView mav = new ModelAndView();
+		
+		if(userId.equals(board.getWriterId())) {
+			mav.addObject("errCode", "1");
+			
+		}else {
+			boardService.updateRecommendCount(board.getRecommendcount() + 1, idx);
+		}
+		
+		mav.addObject("idx", idx);
+		mav.setViewName("redirect:/board/view.do");
+		
+		return mav;
 	}
 	
 	
