@@ -55,7 +55,7 @@ public class BoardService implements BoardDao{
 
 	@Override
 	public BoardCommentModel getOneComment(int idx) {
-		return (BoardCommentModel) sqlMapClientTemplate.queryForObject("board.getConComment", idx);
+		return (BoardCommentModel) sqlMapClientTemplate.queryForObject("board.getOneComment", idx);
 		
 	}
 
@@ -90,9 +90,9 @@ public class BoardService implements BoardDao{
 	@Override
 	public void updateRecommendCount(int recommendcount, int idx) {
 
-		valueMap.put("recommentcount", recommendcount);
+		valueMap.put("recommendcount", recommendcount);
 		valueMap.put("idx", idx);
-		sqlMapClientTemplate.update("board.updateRecommentcount", valueMap);
+		sqlMapClientTemplate.update("board.updateRecommendcount", valueMap);
 		
 	}
 

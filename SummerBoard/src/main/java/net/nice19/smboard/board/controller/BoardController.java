@@ -32,12 +32,12 @@ public class BoardController {
 	
 	private int currentPage = 1;
 	private int showArticleLimit = 10;
-	private int showPageLimit;
+	private int showPageLimit = 10;
 	private int startArticleNum = 0;
 	private int endArticleNum = 0;
 	private int totalNum = 0;
 	
-	private String uploadPath = "C:\\Users\\EZEN\\git\\repository4\\SummerBoard\\src\\main\\webapp\\files";
+	private String uploadPath = "C:\\Users\\EZEN\\git\\repository4\\SummerBoard\\src\\main\\webapp\\files\\";
 	
 	
 	@RequestMapping("/list.do")
@@ -47,28 +47,23 @@ public class BoardController {
 		
 		String type = null;
 		String keyword = null;
+		List<BoardModel> boardList;
 		
-		if(request.getParameter("page") == null || request.getParameter("page").isBlank()) {
+		if(request.getParameter("page") == null || request.getParameter("page").isBlank() || request.getParameter("page").equals("0")) {
 			currentPage = 1;
 		}else {
 			currentPage = Integer.parseInt(request.getParameter("page"));
 		}
 		
-		if(request.getParameter("type") != null) {
-			type = request.getParameter("type").trim();
-		}
-		
-		if(request.getParameter("keyword") != null) {
-			keyword = request.getParameter("keyword").trim();
-		}
-		
 		startArticleNum = (currentPage - 1) * showArticleLimit + 1;
 		endArticleNum = startArticleNum + showArticleLimit - 1;
 		
-		List<BoardModel> boardList;
-		if(type != null && keyword != null) {
+		
+		if(request.getParameter("type") != null) {
+			type = request.getParameter("type").trim();
+			keyword = request.getParameter("keyword").trim();
 			boardList = boardService.searchArticle(type, keyword, startArticleNum, endArticleNum);
-			totalNum = boardService.getTotalNum();
+			totalNum = boardService.getSearchTotalNum(type, keyword);
 			
 		}else {
 			boardList = boardService.getBoardList(startArticleNum, endArticleNum);
@@ -80,14 +75,12 @@ public class BoardController {
 			
 		mav.addObject("boardList", boardList);
 		mav.addObject("pageHtml", pageHtml);
-		mav.setViewName("/booard/list");
-		
-		
+		mav.setViewName("/board/list");
 		
 		return mav;
 		
 	}
-
+	
 
 	private StringBuffer getPageHtml(int currentPage, int totalNum, int showArticleLimit, int showPageLimit, String type, String keyword) {
 		StringBuffer pageHtml = new StringBuffer();
@@ -126,6 +119,7 @@ public class BoardController {
 				pageHtml.append(".</span>");
 			} else {
 				pageHtml.append(".&nbsp;&nbsp;<a href=\"list.do?page=" + (currentPage+1) + "\"><다음></a></span>");
+				
 			}
 		//
 		// else: when search
@@ -165,6 +159,7 @@ public class BoardController {
 		List<BoardCommentModel> commentList = boardService.getCommentList(idx);
 		
 		ModelAndView mav = new ModelAndView();
+
 		mav.addObject("board", board);
 		mav.addObject("commentList", commentList);
 		mav.setViewName("/board/view");
@@ -174,7 +169,7 @@ public class BoardController {
 	
 	@RequestMapping("/write.do")
 	public String boardWrite(@ModelAttribute("BoardModel") BoardModel boardModel) {
-		return "/board/wirte";
+		return "/board/write";
 	}
 	
 	@RequestMapping(value="/write.do", method = RequestMethod.POST)
@@ -228,7 +223,7 @@ public class BoardController {
 		int idx = Integer.parseInt(request.getParameter("idx"));
 		
 		BoardModel board = boardService.getOneArticle(idx);
-		String content = board.getContent().replaceAll("\r\n", "<br/>");
+		String content = board.getContent().replaceAll("<br/>", "\r\n");
 		board.setContent(content);
 		
 		ModelAndView mav = new ModelAndView();
@@ -327,7 +322,7 @@ public class BoardController {
 	@RequestMapping("/commentDelete.do")
 	public ModelAndView commentDelete(HttpServletRequest request, HttpSession session) {
 		
-		int idx = Integer.parseInt(request.getParameter("linkedArticleNum"));
+		int idx = Integer.parseInt(request.getParameter("idx"));
 		int linkedArticleNum = Integer.parseInt(request.getParameter("linkedArticleNum"));
 		
 		String userId = (String) session.getAttribute("userId");
@@ -370,6 +365,7 @@ public class BoardController {
 		return mav;
 	}
 	
+	/* @RequestMapping() */
 	
 	
 }

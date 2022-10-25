@@ -23,7 +23,8 @@
 <script type="text/JavaScript">
 
 	function checkErrCode(){
-		var errCode = ${errCode};
+		
+		var errCode = <%=request.getParameter("errCode")%>;
 		
 		if(errCode != null || errCode != ""){
 			switch (errCode){
@@ -39,8 +40,7 @@
 			
 			case 3:
 				alert("회원가입 처리가 완료되었습니다.! 로그인 해 주세요!");
-				location.href='<%=request.getContextPath()%>
-	/login.do';
+				location.href='<%=request.getContextPath()%>/login.do';
 				break;
 			}
 		}

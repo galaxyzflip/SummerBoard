@@ -41,18 +41,19 @@ public class MemberController {
 		MemberModel checkMemberModel = memberService.findByUserId(memberModel.getUserId());
 		
 		if(checkMemberModel != null) {
-			mav.addObject("errCode", 1);
+			mav.addObject("errCode", "1");
 			mav.setViewName("/board/join");
 			return mav;
 		}
 		
 		if(memberService.addMember(memberModel)) {
-			mav.addObject("errCode", 3);
-			mav.setViewName("/board/login");
+			mav.addObject("errCode", "3");
+			/* mav.setViewName("/board/login"); */
+			mav.setViewName("redirect:/login.do"); 
 			return mav;
 			
 		}else {
-			mav.addObject("errCode", 2);
+			mav.addObject("errCode", "2");
 			mav.setViewName("/board/join");
 			return mav;
 		}

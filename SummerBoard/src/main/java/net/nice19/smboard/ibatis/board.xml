@@ -16,7 +16,22 @@
 
 	<select id="getBoardList" parameterClass="java.util.HashMap" resultClass="BoardModel">
 	
-		SELECT
+		select * 
+		
+		from
+			(SELECT  idx,subject,writer, content, hitcount, recommendcount, to_char(writedate,'yyyy/mm/dd hh24:mi:ss') writedate,
+					    writerid, filename,ROWNUM rnum, 		    (SELECT COUNT(1) FROM jmboard_comment c WHERE c.linkedarticlenum = a.idx) AS "comment"
+			
+			FROM (SELECT idx, subject, writer, content,hitcount,recommendcount, writedate, writerid, filename
+					        FROM jmboard  ORDER BY idx DESC ) a
+					ORDER BY  rnum ASC)
+		where rnum between #startArticleNum# and #endArticleNum#
+			
+	
+
+
+	
+		<!-- SELECT
 		    b.idx,    b.writer,    b.subject,    b.content,    b.hitcount,    b.recommendcount,
 		    to_char(b.writedate, 'yyyy-mm-dd- hh24:mi:ss') writedate,    COUNT(b.idx) AS "comment",
 		    b.writerid,    b.filename,    b.rnum
@@ -41,7 +56,9 @@
 		    b.idx,    b.writer,    b.subject,    b.content,    b.hitcount,    b.recommendcount,
 		    b.writedate,    b.rnum,    b.writerid,    b.filename
 		ORDER BY
-		    b.idx DESC
+		    b.idx DESC -->
+		    
+		    
 	
 	</select>
 	
@@ -55,7 +72,23 @@
 	
 	<select id="searchArticle" parameterClass="java.util.HashMap" resultClass="BoardModel">
 	
-		SELECT
+		select * 
+		
+		from
+			(SELECT  idx,subject,writer, content, hitcount, recommendcount, to_char(writedate,'yyyy/mm/dd hh24:mi:ss') writedate,
+					    writerid, filename,ROWNUM rnum, 		    (SELECT COUNT(1) FROM jmboard_comment c WHERE c.linkedarticlenum = a.idx) AS "comment"
+			
+			FROM (SELECT idx, subject, writer, content,hitcount,recommendcount, writedate, writerid, filename
+					        FROM jmboard 
+					        where $type$ like '%$keyword$%'
+					         ORDER BY idx DESC ) a
+					ORDER BY  rnum ASC)
+		where rnum between #startArticleNum# and #endArticleNum#
+			
+		
+		
+	
+	<!-- 	SELECT
 		    b.idx, b.writer, b.subject, b.content,  b.hitcount,  b.recommendcount,
 		    to_char(b.writedate, 'yyyy-mm-dd hh24:mi:ss') writedate,  COUNT(c.idx) AS "comment",    b.writerid,
 		    b.filename,  b.rnum 
@@ -76,7 +109,7 @@
 		    b.writedate, b.rnum, b.writerid,  b.filename
 		ORDER BY
 		    b.idx DESC
-	
+	 -->
 	
 	</select>
 
@@ -87,7 +120,7 @@
 		from jmboard where idx = #idx#
 	</select>
 	
-	<select id="getcommentList" parameterClass="int" resultClass="BoardCommentModel">
+	<select id="getCommentList" parameterClass="int" resultClass="BoardCommentModel">
 	
 		select idx, writer, content, writeDate, linkedArticleNum, writerId 
 		from jmboard_comment
@@ -97,7 +130,7 @@
 	</select>
 	
 	<select id="getOneComment" parameterClass="int" resultClass="BoardCommentModel">
-		select idx, writer, content, writeDate, linkedArticleNum, wrtierId
+		select idx, writer, content, writeDate, linkedArticleNum, writerId
 		from jmboard_comment
 		where idx = #idx#
 	
@@ -105,9 +138,9 @@
 
 	<insert id="writeArticle" parameterClass="boardModel">
 		insert into
-		jmboard(idx, writer, subjevct, content, hitcount, recommendcount,
+		jmboard(idx, writer, subject, content, hitcount, recommendcount,
 		writeDate, writerId, fileName)
-		values(boardlistsql.nextVal, #writer#,
+		values(boardlistseq.nextVal, #writer#,
 		#subject#, #content#, 0, 0, sysdate, #writerId#, #fileName#)
 	</insert>
 
@@ -122,7 +155,7 @@
 
 	<update id="updateRecommendcount"
 		parameterClass="java.util.HashMap">
-		update jmboard set recommentcount = #recommentcount#
+		update jmboard set recommendcount = #recommendcount#
 		where idx = #idx#
 	</update>
 
@@ -142,6 +175,14 @@
 		where
 		idx = #idx#
 	</update>
+	
+	<update id="updateHitCount" parameterClass="java.util.HashMap">
+		update jmboard 
+		set hitcount = hitcount + 1
+		where idx = #idx#
+	
+	</update>
+	
 
 
 

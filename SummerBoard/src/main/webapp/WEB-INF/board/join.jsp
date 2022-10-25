@@ -12,10 +12,14 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 
-<link href="<%=request.getContextPath()%>/css/main.css"
-	rel="stylesheet" type="text/css" />
-<script type="text/JavaScript"
-	src="<%=request.getContextPath()%>/js/jquery-1.7.1.js"></script>
+<%-- <link href="<%=request.getContextPath()%>/css/main.css" rel="stylesheet" type="text/css" /> --%>
+
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet" type="text/css" />
+
+
+<%-- <script type="text/JavaScript" src="<%=request.getContextPath()%>/js/jquery-1.7.1.js"></script> --%>
+<script type="text/JavaScript" src="${pageContext.request.contextPath }/js/jquery-1.7.1.js"></script>
+
 
 <c:if test="${errCode == null }">
 	<c:set var="errCode" value="\"\"" />

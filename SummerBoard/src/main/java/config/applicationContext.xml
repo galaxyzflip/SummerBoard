@@ -37,7 +37,7 @@
 
 <bean id="loginService" class="net.nice19.smboard.login.service.LoginService" p:sqlMapClientTemplate-ref="sqlMapClientTemplate"/>
 <bean id="memberService" class="net.nice19.smboard.member.service.MemberService" p:sqlMapClientTemplate-ref="sqlMapClientTemplate"/>
-<!-- <bean id="boardService" class="net.nice19.smboard.member.service.BoardService" p:sqlMapClientTemplate-ref="sqlMapClientTemplate"/> -->
+<bean id="boardService" class="net.nice19.smboard.board.service.BoardService" p:sqlMapClientTemplate-ref="sqlMapClientTemplate"/>
 
 
 </beans>

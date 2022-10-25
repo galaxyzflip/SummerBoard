@@ -16,8 +16,8 @@
 		class="net.nice19.smboard.login.controller.LoginController" />
 	<bean id="memberController"
 		class="net.nice19.smboard.member.controller.MemberController" />
-	<!-- <bean id="boardController"
-		class="net.nice19.smboard.board.controller.BoardController" /> -->
+	<bean id="boardController"
+		class="net.nice19.smboard.board.controller.BoardController" />
 
 	<!-- viewResolver -->
 
